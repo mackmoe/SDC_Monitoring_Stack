@@ -4,3 +4,24 @@ groups:
       - alert: FakeSvcDown
         expr: up{job="services"} < 1 
         for: 5m
+  - name: NodeCPUStats
+    rules:
+      # The count of CPUs per node, useful for getting CPU time as a percent of total.
+      - alert: NodeCPUbyCount
+        record: instance:node_cpus:count
+        expr: count(node_cpu_seconds_total{mode="idle"}) without (cpu,mode)
+
+      # CPU in use by CPU.
+      - alert: NodeCPUbyUsage
+        record: instance_cpu:node_cpu_seconds_not_idle:rate5m
+        expr: sum(rate(node_cpu_seconds_total{mode!="idle"}[5m])) without (mode)
+
+      # CPU in use by mode.
+      - alert: NodeCPUuseByMode
+        record: instance_mode:node_cpu_seconds:rate5m
+        expr: sum(rate(node_cpu_seconds_total[5m])) without (cpu)
+
+      # CPU in use ratio.
+      - alert: NodeCPUuseRatio
+        record: instance:node_cpu_utilization:ratio
+        expr: sum(instance_mode:node_cpu_seconds:rate5m{mode!="idle"}) without (mode) / instance:node_cpus:count

@@ -4,14 +4,18 @@ global:
 
 rule_files:
   - alert.yml
-
+  
 scrape_configs:
+  - job_name: node
+    static_configs:
+    - targets: ['localhost:9100']
+
   - job_name: services
     metrics_path: /metrics
     static_configs:
       - targets:
           - 'prometheus:9090'
-          - 'idonotexists:564'
+
 alerting:
   alertmanagers:
     - scheme: https
