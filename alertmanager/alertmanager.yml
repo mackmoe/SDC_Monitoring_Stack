@@ -9,6 +9,6 @@ receivers:
     email_configs:
       - smarthost: 'smtp.gmail.com:465'
         auth_username: 'maurice.nash1@gmail.com'
-        auth_password: "eubcwbpfivhdaqrp"
+        auth_password: ""
         from: 'maurice.nash1@gmail.com'
         to: 'maurice.nash1@gmail.com'
